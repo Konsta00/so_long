@@ -6,7 +6,7 @@
 /*   By: kkorpela <kkorpela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 13:30:52 by kkorpela          #+#    #+#             */
-/*   Updated: 2025/07/24 19:00:53 by kkorpela         ###   ########.fr       */
+/*   Updated: 2025/07/24 20:04:35 by kkorpela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ static int parse_error(t_map *map)
 	return (0);
 }
 
+
+
 static int		count_lines(int fd)
 {
 	int		count;
@@ -59,40 +61,115 @@ void	set_positions(t_map *map)
 	int	j;
 
 	i = 0;
-	while (map->grid[i])
+	while (i < map->rows)
 	{
 		j = 0;
-		while (map->grid[i][j])
+		while (j < map->cols)
 		{
 			if (map->grid[i][j] == 'P')
 			{
-				map->player_x = i;
-				map->player_y = j;
+				map->player_y = i;
+				map->player_x = j;
 			}
 			else if (map->grid[i][j] == 'E')
 			{
-				map->exit_x = i;
-				map->exit_y = j;
+				map->exit_y = i;
+				map->exit_x = j;
 			}
 			else if (map->grid[i][j] == 'C')
 			{
-				map->collectible_x = i;
-				map->collectible_y = j;
+				map->collectible_y = i;
+				map->collectible_x = j;
 			}
-
 			j++;
 		}
 		i++;
 	}
 }
 
+//MAKE SURE TO GO THROUGH EACH FUNCTIONS AND REMOVE UNNECCESSERY ERROR CHECKS ETC
+void	flood_fill(char **map, int x, int y, int width, int height)
+{
+	if (x < 0 || y < 0 || x >= width || y >= height)
+		return ;
+	if (map[y][x] == '1' || map[y][x] == 'V')
+		return ;
+	map[y][x] = 'V';
+	flood_fill(map, x + 1, y, width, height);
+	flood_fill(map, x - 1, y, width, height);
+	flood_fill(map, x, y + 1, width, height);
+	flood_fill(map, x, y - 1, width, height);
+}
+
+char	**duplicate_map(char **map, int	height)
+{
+	char	**map_copy;
+	int		i;
+
+	i = 0;
+	map_copy = malloc(sizeof(char *) * (height + 1));
+	if (!map_copy)
+		return (NULL);
+	while (i < height)
+	{
+		map_copy[i] = ft_strdup(map[i]);
+		i++;
+	}
+	map_copy[height] = NULL;
+	return (map_copy);
+}
+
+void	free_map_v(char **map, int height)
+{
+	int	i;
+
+	i = 0;
+	while (i < height)
+	{
+		free(map[i]);
+		i++;
+	}
+	free(map);
+}
+
+bool	check_reachability(char **map, int width, int height)
+{
+	int	x;
+	int	y;
+
+	y = 0;
+	while (y < height)
+	{
+		x = 0;
+		while (x < width)
+		{
+			if (map[y][x] == 'C' || map[y][x] == 'E')
+				return (false);
+			x++;
+		}
+		y++;
+	}
+	return (true);
+}
+
+
 static int		validate_path(t_map *map)
 {
+	char	**map_copy;
+	bool	valid;
+	t_point	start = {-1, -1};
+
 	set_positions(map);
+	start.x = map->player_x;
+	start.y = map->player_y;
 	printf("Player pos x:%d, y:%d\n", map->player_x, map->player_y);
 	printf("Exit pos x:%d, y:%d\n", map->exit_x, map->exit_y);
 	printf("Collectible pos x:%d, y:%d", map->collectible_x, map->collectible_y);
-	return (1);
+	map_copy = duplicate_map(map->grid, map->rows);
+	flood_fill(map_copy, start.x, start.y, map->cols, map->rows);
+	valid = check_reachability(map_copy, map->cols, map->rows);
+	free_map_v(map_copy, map->rows);
+	return (valid);
 }
 
 static int		validate_walls(t_map *map)
@@ -170,8 +247,9 @@ static int		parse_map(t_map *map, int fd)
 		printf("%s", line);
 		line = get_next_line(fd);
 	}
-	validate_path(map);
-	return (validate_walls(map));
+	if (validate_path(map) && validate_walls(map))
+		return (1);
+	return (0);
 }
 
 int	main(int ac, char **av)
