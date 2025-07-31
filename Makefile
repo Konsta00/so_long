@@ -10,22 +10,37 @@ CFLAGS      := -Wall -Wextra -Werror
 
 # Directories
 SRC_DIR     := src
+GAME_DIR    := $(SRC_DIR)/game
+MAP_DIR     := $(SRC_DIR)/map
+UTILS_DIR   := $(SRC_DIR)/utils
 OBJ_DIR     := obj
 LIBFT_DIR   := libft
 MLX_DIR     := minilibx
 
-# Source and Object Files
-SRCS        := so_long.c
+# Source Files
+SRCS        :=  $(GAME_DIR)/game_engine.c \
+                $(GAME_DIR)/game_controls.c \
+                $(GAME_DIR)/game_images.c \
+                $(GAME_DIR)/game_render.c \
+                $(MAP_DIR)/map_loader.c \
+                $(MAP_DIR)/map_parser.c \
+                $(MAP_DIR)/map_positions.c \
+                $(MAP_DIR)/map_utils.c \
+                $(MAP_DIR)/map_validate.c \
+                $(UTILS_DIR)/utils.c \
+				$(SRC_DIR)/so_long.c
 
-OBJS        := $(addprefix $(OBJ_DIR)/,$(SRCS:.c=.o))
 
-# Library
+# Object Files (same structure as source, in obj/)
+OBJS        := $(SRCS:.c=.o)
+OBJS_DIRS   := $(sort $(dir $(OBJS)))
+
+# Libraries
 LIBFT       := $(LIBFT_DIR)/libft.a
 MLX_LIB     := -L$(MLX_DIR) -lmlx -lXext -lX11 -lm -lbsd
 
 # Includes
-INC := -Iinclude -I$(LIBFT_DIR)/include -Iminilibx
-
+INC         := -Iinclude -I$(LIBFT_DIR)/include -I$(MLX_DIR)
 
 # ========================================
 #               Colors
@@ -46,12 +61,11 @@ $(NAME): $(OBJS) $(LIBFT)
 	@$(CC) $(CFLAGS) $(INC) $(OBJS) $(LIBFT) $(MLX_LIB) -o $(NAME)
 	@echo "$(GREEN)✔ $(NAME) built successfully!$(RESET)"
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
+# Compile rule (create obj/ tree if needed)
+%.o: %.c
+	@mkdir -p $(dir $@)
 	@echo "$(GREEN)[Compiling]$(RESET) $<"
 	@$(CC) $(CFLAGS) $(INC) -c $< -o $@
-
-$(OBJ_DIR):
-	@mkdir -p $(OBJ_DIR)
 
 $(LIBFT):
 	@echo "$(YELLOW)[Building]$(RESET) libft"
@@ -59,6 +73,7 @@ $(LIBFT):
 
 clean:
 	@echo "$(YELLOW)[Cleaning]$(RESET) object files"
+	@rm -rf $(SRC_DIR)/*.o $(GAME_DIR)/*.o $(MAP_DIR)/*.o $(UTILS_DIR)/*.o
 	@rm -rf $(OBJ_DIR)
 	@$(MAKE) -C $(LIBFT_DIR) clean
 
@@ -70,5 +85,4 @@ fclean: clean
 
 re: fclean all
 
-.SECONDARY: $(OBJS)
 .PHONY: all clean fclean re

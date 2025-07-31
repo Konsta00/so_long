@@ -6,22 +6,28 @@
 /*   By: kkorpela <kkorpela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 13:32:52 by kkorpela          #+#    #+#             */
-/*   Updated: 2025/07/24 19:54:27 by kkorpela         ###   ########.fr       */
+/*   Updated: 2025/07/31 20:15:26 by kkorpela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef SO_LONG_H
 # define SO_LONG_H
 
-# include <stdlib.h>
-# include <stdio.h>
 # include <fcntl.h>
-# include <sys/stat.h>
+# include <stdlib.h>
 # include <unistd.h>
+# include <stdio.h>
+# include <stdbool.h>
+# include <mlx.h>
 # include "libft.h"
-# include "mlx.h"
 
-typedef struct	s_map
+typedef struct s_point
+{
+	int	x;
+	int	y;
+}	           t_point;
+
+typedef struct s_map
 {
 	char	**grid;
 	int		rows;
@@ -35,16 +41,54 @@ typedef struct	s_map
 	int		exit_y;
 	int		collectible_x;
 	int		collectible_y;
-}				t_map;
+    void    *mlx;
+    void    *win;
+	void	*wall_img;
+	void	*floor_img;
+	void	*player_img;
+	void	*exit_img;
+	void	*collectible_img;
+	void	*exit_p_img;
+	int		img_w;
+	int		img_h;
+	int		move_count;
+}	            t_map;
 
-typedef struct
-{
-	int		x;
-	int		y;
-}			t_point;
+/* main.c */
+int		main(int ac, char **av);
 
+/* map_loader.c / map_parser.c */
+int		validate_line(char *line, t_map *map, int row);
+int		parse_map(t_map *map, int fd);
+int		init_map(t_map *map, char *filename);
+int		process_map(t_map *map, char *filename);
 
-// char **parse_map(char *str);
+/* map_utils.c */
+void	free_map(t_map *map);
+void	free_grid(char **map, int height);
+int		parse_error(t_map *map);
+int		count_lines(int fd);
+void	flood_fill(char **map, int width, int height, t_point pos);
+char	**duplicate_map(char **map, int height);
+int		validate_player_and_exit(int player_count, int exit_count);
+bool	check_reachability(char **map, int width, int height);
 
+/* map_validate.c */
+int		validate_path(t_map *map);
+int		validate_walls(t_map *map);
+void	set_positions(t_map *map);
+void	update_position(t_map *map, char c, int i, int j);
+
+/* game_engine.c */
+void	start_game(t_map *map);
+int		close_game(t_map *map);
+int		handle_key(int keycode, t_map *map);
+void	move_player(t_map *map, int dx, int dy);
+int		win_game(t_map *map, int x, int y, int *moves);
+
+/* game_render.c / game_images.c */
+void	init_images(t_map *map);
+void	put_image(t_map *map, void *img, int x, int y);
+void	render_map(t_map *map);
 
 #endif
