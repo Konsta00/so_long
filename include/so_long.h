@@ -6,7 +6,7 @@
 /*   By: kkorpela <kkorpela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 13:32:52 by kkorpela          #+#    #+#             */
-/*   Updated: 2025/07/31 20:15:26 by kkorpela         ###   ########.fr       */
+/*   Updated: 2025/08/04 19:13:11 by kkorpela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,15 @@ typedef struct s_point
 	int	x;
 	int	y;
 }	           t_point;
+
+typedef struct s_enemy
+{
+	int		x;
+	int		y;
+	int		dx;
+	int		dy;
+
+}				t_enemy;
 
 typedef struct s_map
 {
@@ -49,10 +58,14 @@ typedef struct s_map
 	void	*exit_img;
 	void	*collectible_img;
 	void	*exit_p_img;
+	void	*move_counter_img;
 	int		img_w;
 	int		img_h;
-	int		move_count;
-}	            t_map;
+	int		moves;
+	t_enemy	*enemies;
+	int		enemy_count;
+	void	*enemy_img;
+}				t_map;
 
 /* main.c */
 int		main(int ac, char **av);
@@ -84,7 +97,15 @@ void	start_game(t_map *map);
 int		close_game(t_map *map);
 int		handle_key(int keycode, t_map *map);
 void	move_player(t_map *map, int dx, int dy);
-int		win_game(t_map *map, int x, int y, int *moves);
+int		win_game(t_map *map, int x, int y);
+void print_map(t_map *map);
+
+
+// game_enemy
+void move_all_enemies(t_map *map);
+void move_enemy(t_map *map, int index);
+void init_enemies(t_map *map);
+
 
 /* game_render.c / game_images.c */
 void	init_images(t_map *map);

@@ -19,6 +19,7 @@ MLX_DIR     := minilibx
 
 # Source Files
 SRCS        :=  $(GAME_DIR)/game_engine.c \
+				$(GAME_DIR)/game_enemy.c \
                 $(GAME_DIR)/game_controls.c \
                 $(GAME_DIR)/game_images.c \
                 $(GAME_DIR)/game_render.c \

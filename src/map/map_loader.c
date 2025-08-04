@@ -6,9 +6,11 @@
 /*   By: kkorpela <kkorpela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 17:52:10 by kkorpela          #+#    #+#             */
-/*   Updated: 2025/07/31 18:23:08 by kkorpela         ###   ########.fr       */
+/*   Updated: 2025/08/04 17:25:53 by kkorpela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+// map_loader.c
 
 #include "so_long.h"
 

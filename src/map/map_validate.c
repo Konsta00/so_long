@@ -6,13 +6,13 @@
 /*   By: kkorpela <kkorpela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 17:53:38 by kkorpela          #+#    #+#             */
-/*   Updated: 2025/07/31 18:27:20 by kkorpela         ###   ########.fr       */
+/*   Updated: 2025/08/04 18:47:25 by kkorpela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+// map_validate.c
+
 #include "so_long.h"
-
-
 
 static int	validate_chars(char *line, int row, t_map *map)
 {
@@ -27,6 +27,11 @@ static int	validate_chars(char *line, int row, t_map *map)
 			map->exit++;
 		else if (line[i] == 'C')
 			map->collectibles++;
+		else if (line[i] == 'G')
+		{
+			map->enemy_count++;
+			ft_printf("Hit G validate_chars\n");
+		}
 		else if (line[i] != '0' && line[i] != '1')
 		{
 			ft_printf("Invalid character '%c' at row %d, col %d\n",

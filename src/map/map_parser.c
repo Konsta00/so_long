@@ -6,7 +6,7 @@
 /*   By: kkorpela <kkorpela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 17:56:59 by kkorpela          #+#    #+#             */
-/*   Updated: 2025/07/31 17:57:12 by kkorpela         ###   ########.fr       */
+/*   Updated: 2025/08/04 17:19:40 by kkorpela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ int	parse_map(t_map *map, int fd)
 	map->player = 0;
 	map->exit = 0;
 	map->collectibles = 0;
+	map->enemy_count = 0;
 	line = get_next_line(fd);
 	while (line)
 	{

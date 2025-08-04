@@ -6,9 +6,11 @@
 /*   By: kkorpela <kkorpela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 17:53:38 by kkorpela          #+#    #+#             */
-/*   Updated: 2025/07/31 17:58:19 by kkorpela         ###   ########.fr       */
+/*   Updated: 2025/08/04 17:32:39 by kkorpela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+// map_positions.c
 
 #include "so_long.h"
 

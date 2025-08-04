@@ -6,7 +6,7 @@
 /*   By: kkorpela <kkorpela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/31 17:51:22 by kkorpela          #+#    #+#             */
-/*   Updated: 2025/07/31 20:15:33 by kkorpela         ###   ########.fr       */
+/*   Updated: 2025/08/04 18:34:39 by kkorpela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,16 @@ void	init_images(t_map *map)
 	map->exit_p_img = mlx_xpm_file_to_image(
 			map->mlx,
 			"resources/images/exit_player_floor_64.xpm",
+			&map->img_w,
+			&map->img_h);
+	map->move_counter_img = mlx_xpm_file_to_image(
+			map->mlx,
+			"resources/images/moves_128_64.xpm",
+			&map->img_w,
+			&map->img_h);
+	map->enemy_img = mlx_xpm_file_to_image(
+			map->mlx,
+			"resources/images/humpty_dumpty_64.xpm",
 			&map->img_w,
 			&map->img_h);
 }
