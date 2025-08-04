@@ -6,9 +6,11 @@
 /*   By: kkorpela <kkorpela@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 17:12:05 by kkorpela          #+#    #+#             */
-/*   Updated: 2025/07/31 20:47:26 by kkorpela         ###   ########.fr       */
+/*   Updated: 2025/08/04 19:40:42 by kkorpela         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+// game_controls.c
 
 #include "so_long.h"
 
